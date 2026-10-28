@@ -3,51 +3,51 @@ BEGIN bfmerc
 
 /* lacks sigil of tyr */
 CHAIN IF ~!PartyHasItem("ohdsigil")~ THEN bfmerc bfs.nomercy
-~I have bounties to offer to Tyr's faithful. Lacking his Sigil, however, such burdens cannot be yours to bear.~ [bfblank] EXIT 
+~我只为提尔的信徒发布赏金任务。没有他的圣徽，这份重担便轮不到你来承担。~ [bfblank] EXIT 
 
 /* player has the sigil of tyr */
 CHAIN IF ~PartyHasItem("ohdsigil") Global("bfsmercyspokento","LOCALS",0)~ THEN bfmerc bfs.killthemwithkindness
-~You bear Tyr's sigil. With his mark, I may entrust you with lesser bounties. A writ have been inscribed if you wish to claim it.~ [bfblank]
+~你佩戴着提尔的圣徽。有此印记，我便可将一些次要的赏金任务托付于你。若你愿意接取，委任状已经备好。~ [bfblank]
 DO ~SetGlobal("bfsmercyspokento","LOCALS",1)~
 END
-+ ~Global("bfmercyhistory","LOCALS",0)~ + ~Are you one of Tyr's faithful?~ DO ~SetGlobal("bfmercyhistory","LOCALS",1)~ EXTERN bfmerc bfs.mercyhistorylesson
-++ ~Tell me of this bounty. Who are they and what crimes weigh upon them?~ EXTERN bfmerc bfs.fallenfromgrace
-++ ~I've no interest in chasing fugitives.~ EXTERN bfmerc bfs.justiceneversleeps
++ ~Global("bfmercyhistory","LOCALS",0)~ + ~你也是提尔的信徒吗？~ DO ~SetGlobal("bfmercyhistory","LOCALS",1)~ EXTERN bfmerc bfs.mercyhistorylesson
+++ ~说说这个赏金任务吧。目标是谁？他们犯下了什么罪行？~ EXTERN bfmerc bfs.fallenfromgrace
+++ ~我没兴趣追捕逃犯。~ EXTERN bfmerc bfs.justiceneversleeps
 
 CHAIN bfmerc bfs.justiceneversleeps
-~So be it. May you find justice...or retribution, as the case may be.~ [bfmer4] EXIT 
+~随你便。愿你寻得正义……或是报应，看你自己的造化了。~ [bfmer4] EXIT 
 
 CHAIN bfmerc bfs.mercyhistorylesson
-~No. I am the most just and merciful Whitedove, Doombringer of Hoar. You may call me Mercy.~ [bfmer1]
-== BFMERC ~Even in the heavenly realms, injustice festers. I walk the path of retribution, striking where Hoar deems it necessary.~
+~不。我便是秉持公正与悲悯的白鸠，霍尔的末日使者。你可以称我为默西。~ [bfmer1]
+== BFMERC ~即便在天界国度，不公也在滋生蔓延。我行走于复仇之道，在霍尔认为必要之处降下制裁。~
 END
-++ ~Tell me of this bounty. Who are they and what crimes weigh upon them?~ EXTERN bfmerc bfs.fallenfromgrace
-++ ~I've no interest in chasing fugitives.~ EXTERN bfmerc bfs.justiceneversleeps
+++ ~说说这个赏金任务吧。目标是谁？他们犯下了什么罪行？~ EXTERN bfmerc bfs.fallenfromgrace
+++ ~我没兴趣追捕逃犯。~ EXTERN bfmerc bfs.justiceneversleeps
 
 CHAIN bfmerc bfs.fallenfromgrace
-~Once servants of Tyr and the Upper Planes, a group of celestials have fallen from grace. Their corruption spreads within Mount Celestia, sullying its court and leading petitioners astray.~
-== BFMERC ~By the command of Tyr, they must be purged, so the faithful may seek guidance untainted by malice.~ 
+~有一群天界生物曾是提尔与上层位面的仆从，如今却已堕落失格。他们的腐化在天堂山蔓延，玷污了天界的殿堂，也将祈并者引入歧途。~
+== BFMERC ~奉提尔之命，必须将他们彻底清除，好让信徒们能在不受恶意沾染的环境中寻求指引。~ 
 END
-++ ~I will take this bounty.~ EXTERN bfmerc bfs.fallencelestials
-++ ~This is where my contributions to Tyr's cause ends.~ EXTERN bfmerc bfs.justiceneversleeps
+++ ~我接下这个赏金任务。~ EXTERN bfmerc bfs.fallencelestials
+++ ~我对提尔事业的贡献就到此为止了。~ EXTERN bfmerc bfs.justiceneversleeps
 
 CHAIN bfmerc bfs.fallencelestials
-~Violence repays violence. Evil repays evil. Good repays good.~ [bfmer3]
-== BFMERC ~I shall teleport you to the glade where the celestials last lingered. I trust you have your own means of return.~
-== BFMERC ~Let justice, or retribution, guide your hand.~ 
+~以暴制暴，以恶惩恶，以善报善。~ [bfmer3]
+== BFMERC ~我会将你传送至那些天界生物最后出没的林间空地。我相信你自有办法返回。~
+== BFMERC ~让正义——或是复仇之心，指引你的出手。~ 
 DO ~SetGlobal("bfmercycelestial","GLOBAL",1) ClearAllActions() StartCutSceneMode() StartCutScene("BFCEMT")~ EXIT
 
 /* heard about second chances? yeah, mercy doesn't offer those */
 CHAIN IF ~Global("bfsmercyspokento","LOCALS",1) !GlobalGT("bfmercycelestial","GLOBAL",0)~ THEN bfmerc bfs.mercycatchall
-~I have no time for the cravenhearted.~ [bfblank] EXIT
+~我没时间和胆小鬼浪费口舌。~ [bfblank] EXIT
 
 /* main hub & completed bounty rewards */
 CHAIN IF ~Global("bfsmercyspokento","LOCALS",1) OR(2) GlobalGT("bfmercycelestial","GLOBAL",0) GlobalGT("bfmercyfiends","GLOBAL",0)~ THEN bfmerc bfs.mercymainhub
-~You return. Have you anything to report?~
+~你回来了。有什么要汇报的吗？~
 END
-+ ~PartyHasItem("bfpepr")~ + ~I've dealt with the Fallen Celestials. They will bother Lunia's petitioners no further.~ EXTERN bfmerc bfs.quest2completion
-++ ~Nothing at present.~ EXIT
++ ~PartyHasItem("bfpepr")~ + ~我已经解决了那些堕落的天界生物。他们再也不会骚扰卢尼亚的祈并者了。~ EXTERN bfmerc bfs.quest2completion
+++ ~目前没什么事。~ EXIT
 
 CHAIN bfmerc bfs.quest2completion
-~Swift and reciprocal reward and retribution is the foundation of civilized society.~ [bfmerc2] DO ~TakePartyItem("BFPEPR") DestroyItem("BFPEPR") GiveGoldForce(10000) AddExperienceParty(210000) AddJournalEntry(@100010, QUEST_DONE)~
-== BFMERC ~I've no further bounties to extend to you at this time.~ EXIT
+~赏罚分明、报应不爽，是文明社会的根基。~ [bfmerc2] DO ~TakePartyItem("BFPEPR") DestroyItem("BFPEPR") GiveGoldForce(10000) AddExperienceParty(210000) AddJournalEntry(@100010, QUEST_DONE)~
+== BFMERC ~眼下我没有更多的赏金任务可以交给你了。~ EXIT
